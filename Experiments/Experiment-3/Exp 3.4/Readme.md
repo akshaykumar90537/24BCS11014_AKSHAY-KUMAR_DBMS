@@ -1,5 +1,12 @@
 577. Employee Bonus
-
+Solved
+Easy
+Topics
+premium lock icon
+Companies
+Hint
+SQL Schema
+Pandas Schema
 Table: Employee
 
 +-------------+---------+
