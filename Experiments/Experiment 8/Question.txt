@@ -1,0 +1,18 @@
+
+LAB EXPERMENT 8
+
+**Write a PostgreSQL stored procedure `Insert_Employee` that accepts the following parameters as arguments:**
+
+* `EMP_ID`
+* `EMP_NAME`
+* `SALARY`
+* `DEPARTMENT_NAME`
+
+The procedure
+Requirements:
+
+1. Create an `Employee` table with appropriate columns.
+2. Create tional statement to check whether `EMP_ID` is odd or even.
+4. Use `RAISE EXCEPTION` for an even `EMP_ID`.
+5. Insert the record into the table only when the `EMP_ID` is odd.
+6. Display a success message after successful insertion.
