@@ -1,0 +1,23 @@
+select salary from employee2
+where salary < (
+	select max(salary) from employee2
+) order by salary desc limit 1;
+
+-- Third highest Salary
+select salary from employee2
+where salary < (
+	select max(salary) from employee2
+	where salary < (
+		select max(salary) from employee2
+	)
+) order by salary desc limit 1;
+
+-- Codechef
+select
+f_name,
+f_cost,
+f_type
+from food
+where f_cost > (
+    select avg(f_cost) from food
+)
