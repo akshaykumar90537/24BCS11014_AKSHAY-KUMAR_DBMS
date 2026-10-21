@@ -1,0 +1,26 @@
+CREATE OR REPLACE FUNCTION fn_check_salary_hike_limit()
+RETURNS TRIGGER 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    IF NEW.salary > (OLD.salary * 1.15) THEN
+        RAISE EXCEPTION 'Salary hike exceeds allowable limit: Increase cannot be more than 15%% of current salary (Old: %, New: %, Max Allowed: %)',
+            OLD.salary, 
+            NEW.salary, 
+            (OLD.salary * 1.15)
+        USING ERRCODE = 'P0001'; 
+    END IF;
+
+
+    RETURN NEW;
+END;
+$$;
+
+
+DROP TRIGGER IF EXISTS trg_salary_hike_limit ON Salary_Hike;
+
+CREATE TRIGGER trg_salary_hike_limit
+BEFORE UPDATE OF salary ON Salary_Hike
+FOR EACH ROW
+EXECUTE FUNCTION fn_check_salary_hike_limit();

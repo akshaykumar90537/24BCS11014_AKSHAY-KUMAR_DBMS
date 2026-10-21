@@ -16,3 +16,4 @@ Requirements:
 4. Use `RAISE EXCEPTION` for an even `EMP_ID`.
 5. Insert the record into the table only when the `EMP_ID` is odd.
 6. Display a success message after successful insertion.
+
