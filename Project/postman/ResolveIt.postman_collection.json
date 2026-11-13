@@ -1,0 +1,176 @@
+{
+  "info": {
+    "name": "ResolveIt API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Online Complaint and Grievance Management System REST API"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api" },
+    { "key": "token", "value": "" },
+    { "key": "complaintId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Citizen\",\n  \"email\": \"citizen@example.com\",\n  \"password\": \"Password123!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@resolveit.local\",\n  \"password\": \"User@1234\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Current Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Complaints",
+      "item": [
+        {
+          "name": "Create Complaint",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/complaints",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Water leakage in hostel corridor\",\n  \"description\": \"Water is leaking near room 204.\",\n  \"categoryId\": 1,\n  \"priority\": \"HIGH\",\n  \"location\": \"Hostel Block B, 2nd Floor\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Visible Complaints",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/complaints?page=0&size=10"
+          }
+        },
+        {
+          "name": "Public Track",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/complaints/track/CMP-2026-000001"
+          }
+        },
+        {
+          "name": "Route to Department (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/admin/complaints/{{complaintId}}/route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"departmentId\": 1,\n  \"reason\": \"Routing to Facilities\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Assign Employee (Manager/Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/complaints/{{complaintId}}/assignments",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": 6,\n  \"reason\": \"Assigned to maintenance specialist\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Start Work (Employee)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/complaints/{{complaintId}}/start"
+          }
+        },
+        {
+          "name": "Resolve Complaint (Employee/Manager)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/complaints/{{complaintId}}/resolve",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resolutionNotes\": \"Replaced broken pipe fitting and verified zero leakage.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Submit Feedback (Creator)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/complaints/{{complaintId}}/feedback",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Fast and thorough resolution.\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports (Admin/Manager)",
+      "item": [
+        {
+          "name": "Summary Report",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/reports/summary"
+          }
+        },
+        {
+          "name": "Export CSV",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/reports/export"
+          }
+        }
+      ]
+    }
+  ]
+}
+

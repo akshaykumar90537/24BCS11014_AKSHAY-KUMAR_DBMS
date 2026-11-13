@@ -1,0 +1,84 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  config:
+    import:
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
+  application:
+    name: resolveit-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/resolveit}
+    username: ${SPRING_DATASOURCE_USERNAME:resolveit_app}
+    password: ${SPRING_DATASOURCE_PASSWORD:resolveit_secret}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  servlet:
+    multipart:
+      max-file-size: ${APP_MAX_FILE_SIZE:10MB}
+      max-request-size: ${APP_MAX_REQUEST_SIZE:15MB}
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  health:
+    mail:
+      enabled: false
+  endpoint:
+    health:
+      show-details: when_authorized
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:ResolveItSuperSecretKeyForJwtSigningMustBeAtLeast256BitsLong2026!}
+    access-ttl-seconds: ${JWT_ACCESS_TTL_SECONDS:900}
+    refresh-ttl-seconds: ${JWT_REFRESH_TTL_SECONDS:604800}
+    issuer: ${JWT_ISSUER:resolveit-api}
+  frontend-origin: ${APP_FRONTEND_ORIGIN:http://localhost:5173}
+  file-storage:
+    path: ${APP_FILE_STORAGE_PATH:./uploads}
+    max-file-size-bytes: ${APP_MAX_FILE_SIZE_BYTES:10485760}
+    max-files-per-complaint: ${APP_MAX_FILES_PER_COMPLAINT:5}
+    allowed-extensions: pdf,png,jpg,jpeg,webp,txt,csv,doc,docx
+  sla:
+    scan-delay-ms: ${APP_SLA_SCAN_DELAY_MS:60000}
+    batch-size: ${APP_SLA_BATCH_SIZE:100}
+  mail:
+    enabled: ${APP_MAIL_ENABLED:false}
+    from: ${APP_MAIL_FROM:no-reply@resolveit.local}
+  security:
+    rate-limit-per-minute: ${APP_RATE_LIMIT_PER_MINUTE:60}
+

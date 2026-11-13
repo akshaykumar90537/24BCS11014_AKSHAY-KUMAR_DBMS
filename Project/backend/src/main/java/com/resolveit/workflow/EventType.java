@@ -1,0 +1,19 @@
+package com.resolveit.workflow;
+
+public enum EventType {
+    CREATED,
+    ROUTED_DEPARTMENT,
+    ASSIGNED,
+    REASSIGNED,
+    STATUS_CHANGED,
+    RESOLVED,
+    CLOSED,
+    REJECTED,
+    REOPENED,
+    CANCELLED,
+    SLA_ESCALATED,
+    COMMENT_ADDED,
+    ATTACHMENT_UPLOADED,
+    FEEDBACK_SUBMITTED
+}
+

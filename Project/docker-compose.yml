@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: resolveit-postgres
+    environment:
+      POSTGRES_DB: resolveit
+      POSTGRES_USER: resolveit_app
+      POSTGRES_PASSWORD: resolveit_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U resolveit_app -d resolveit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    container_name: resolveit-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/resolveit
+      SPRING_DATASOURCE_USERNAME: resolveit_app
+      SPRING_DATASOURCE_PASSWORD: resolveit_secret
+      JWT_SECRET: ${JWT_SECRET:-ResolveItProductionSecretChangeBeforeDeployment2026LongKey!}
+      APP_FRONTEND_ORIGIN: http://localhost:5173,http://localhost
+      APP_FILE_STORAGE_PATH: /app/uploads
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads_data:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: resolveit-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  postgres_data:
+  uploads_data:
+
